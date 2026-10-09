@@ -13,7 +13,7 @@
 
 ## Схема БД
 - `owners` 1—∞ `adoption_requests`
-- `animals` 1—∞ `adoption_requests`, `placements`, `veterinary_events`
+- `animals` 1—∞ (`adoption_requests`, `placements`, `veterinary_events`)
 - `enclosures` 1—∞ `placements`
 - `adoption_requests` 1—∞ `transfer_contracts`
 
