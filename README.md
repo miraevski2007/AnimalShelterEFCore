@@ -17,9 +17,27 @@
 - `enclosures` 1—∞ `placements`
 - `adoption_requests` 1—∞ `transfer_contracts`
 
+## База данных
+
+База `AnimalShelterDB` создана в ходе выполнения лабораторной работы №1 (вариант «Приют для животных»).
+Скрипты создания и наполнения базы находятся в каталоге [`sql/`](sql/):
+
+- `01_create_db.sql` — создание базы и таблиц
+- `02_seed_dictionaries.sql` — справочные данные
+- `03_seed_operational.sql` — операционные данные
+- `04_views.sql` — представления
+- `05_procedures.sql` — хранимые процедуры
+
 ## Запуск
 ```bash
 dotnet restore
 dotnet ef dbcontext scaffold "Server=localhost;Database=AnimalShelterDB;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models -c AnimalShelterContext
 dotnet run
+```
 
+## Технологии
+- .NET 10
+- Entity Framework Core 10
+- MS SQL Server
+- LINQ
+- GitHub Actions

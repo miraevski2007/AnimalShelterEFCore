@@ -8,13 +8,13 @@ Console.WriteLine("=== 2.1. Все хозяева (owners) ===");
 foreach (var o in await ctx.Owners.Take(10).ToListAsync())
     Console.WriteLine($"{o.Id}: {o.FullName} | {o.Phone}");
 
-// ===== 2.2. Фильтрация таблицы на стороне "один" =====
-Console.WriteLine("\n=== 2.2. Хозяева с телефоном на +375 ===");
+// ===== 2.2. Фильтрация таблицы на стороне "один" по двум полям =====
+Console.WriteLine("\n=== 2.2. Хозяева с другими животными, проживающие в частном доме ===");
 foreach (var o in await ctx.Owners
-    .Where(x => x.Phone.StartsWith("+375"))
+    .Where(x => x.HasOtherAnimals && x.LivingConditions == "Частный дом")
     .Take(10)
     .ToListAsync())
-    Console.WriteLine($"{o.FullName} — {o.Phone}");
+    Console.WriteLine($"{o.FullName} — {o.Phone} | Жилище: {o.LivingConditions}");
 
 // ===== 2.3. Группировка таблицы на стороне "многие" =====
 Console.WriteLine("\n=== 2.3. Кол-во заявок по статусу ===");
@@ -105,3 +105,4 @@ var toUpdate = await ctx.AdoptionRequests
 foreach (var r in toUpdate) r.Status = "Завершена";
 await ctx.SaveChangesAsync();
 Console.WriteLine($"Обновлено заявок: {toUpdate.Count}");
+

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System.IO;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,9 +38,19 @@ public partial class AnimalShelterContext : DbContext
     public virtual DbSet<ViewAvailableAnimal> ViewAvailableAnimals { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=AnimalShelterDB;Trusted_Connection=True;TrustServerCertificate=True;");
+    {
+        if (optionsBuilder.IsConfigured) return;
 
+        var builder = new ConfigurationBuilder();
+        builder.SetBasePath(Directory.GetCurrentDirectory());
+        builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+        var configuration = builder.Build();
+
+        string connectionString = configuration.GetConnectionString("SQLConnection")
+            ?? throw new InvalidOperationException("Не найдена строка подключения 'SQLConnection'.");
+
+        optionsBuilder.UseSqlServer(connectionString);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AdoptionRequest>(entity =>
@@ -309,3 +321,5 @@ public partial class AnimalShelterContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
+
+
